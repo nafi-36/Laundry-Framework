@@ -57,6 +57,7 @@ export default class PrintLaporan extends React.Component {
                     transaksi: res.data.transaksi,
                     total: res.data.sumTotal,
                 })
+                window.print()
             })
             .catch(err => {
                 console.log(err.message)

@@ -13,11 +13,21 @@ export default class CetakTransaksi extends React.Component {
             // customer: "",
             total: 0
         }
-        if (localStorage.getItem('token') && localStorage.getItem('transaksi_id')) {
-            this.state.token = localStorage.getItem('token')
-            this.state.transaksi_id = localStorage.getItem('transaksi_id')
-            this.state.admin_id = localStorage.getItem('admin_id')
-            this.state.admin_name = localStorage.getItem('admin_name')
+        if (localStorage.getItem('token')) {
+            if (localStorage.getItem("transaksi_id") !== null) {
+                if (localStorage.getItem("role") === "Kasir" || localStorage.getItem("role") === "Owner") {
+                    this.state.token = localStorage.getItem('token')
+                    this.state.transaksi_id = localStorage.getItem('transaksi_id')
+                    this.state.admin_id = localStorage.getItem('admin_id')
+                    this.state.admin_name = localStorage.getItem('admin_name')
+                } else {
+                    window.alert("Anda bukan Kasir / Owner")
+                    window.location = "/"
+                }
+            } else {
+                window.alert("Klik button Detail kemudian Cetak Transaksi untuk mencetak transaksi")
+                window.location = '/transaksi'
+            }
         }
         else {
             window.location = '/login'
@@ -180,10 +190,10 @@ export default class CetakTransaksi extends React.Component {
                             })
                         ))}
                         {/* {this.state.transaksi.map((item, index) => ( */}
-                            <tr>
-                                <td colSpan="4"><b>Total</b></td>
-                                <td className="text-right">Rp {this.state.total}</td>
-                            </tr>
+                        <tr>
+                            <td colSpan="4"><b>Total</b></td>
+                            <td className="text-right">Rp {this.state.total}</td>
+                        </tr>
                         {/* ))} */}
                     </tbody>
                 </table>

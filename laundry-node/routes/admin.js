@@ -23,19 +23,6 @@ const Op = Sequelize.Op;
 
 // GET ALL ADMIN, METHOD: GET, FUNCTION: findAll
 app.get("/", auth, async (req, res) => {
-    // admin.findAll()
-    // .then(admin => {
-    //     res.json({
-    //         count: admin.length,
-    //         admin: admin
-    //     })
-    // })
-    // .catch(error => {
-    //     res.json({
-    //         message: error.message
-    //     })
-    // })
-
     let result = await admin.findAll({
         include: [
             "outlet",
@@ -56,17 +43,6 @@ app.get("/id/:id", async (req, res) => {
     let param = {
         admin_id: req.params.id
     }
-    // admin.findOne({ where: param })
-    //     .then(admin => {
-    //         res.json({
-    //             admin: admin
-    //         })
-    //     })
-    //     .catch(error => {
-    //         res.json({
-    //             message: error.message
-    //         })
-    //     })
     let result = await admin.findOne({
         where: param,
         include: [
@@ -130,7 +106,6 @@ app.put("/:id", (req, res) => {
     let data = {
         name: req.body.name,
         username: req.body.username,
-        // password: md5(req.body.password),
         role: req.body.role,
         outlet_id: req.body.outlet_id
     }
@@ -219,7 +194,7 @@ app.post("/auth", async (req, res) => {
     }
 })
 
-// Search admin
+// SEARCH ADMIN, METHOD: POST, FUNCTION: findAll
 app.post("/search", async (req, res) => {
     let keyword = req.body.keyword
     let result = await admin.findAll({

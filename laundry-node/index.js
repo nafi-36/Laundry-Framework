@@ -28,13 +28,6 @@ app.use("/transaksi", transaksi)
 
 app.use(express.static(__dirname))
 
-// app.get("/test", (req, res) => {
-//     let test = {
-//         message: "test"
-//     }
-//     res.json(test)
-// })
-
 app.listen(9000, () => {
     console.log('server run on port 9000')
 })

@@ -1,4 +1,4 @@
-// ini kode untuk authorization yaitu pengenalan user / pemberian akses pada user
+// Berikut kode untuk authorization yaitu pengenalan user / pemberian akses pada user
 // Token berbentuk string
 // Header warna merah, berisi algoritma dan tipe token
 // Playload warna ungu, sub : id, name : nama, iat : waktu

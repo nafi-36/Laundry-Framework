@@ -24,15 +24,15 @@ export default class FormTransaksi extends React.Component {
         }
         if (localStorage.getItem('token')) {
             if (localStorage.getItem("customer_id") !== null && localStorage.getItem("cart") !== null) {
-                // if (localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "Kasir") {
-                this.state.token = localStorage.getItem("token")
-                this.state.admin_id = localStorage.getItem("admin_id")
-                this.state.customer_id = localStorage.getItem("customer_id")
-                // this.state.outlet_id = localStorage.getItem("outlet_id")
-                // } else {
-                // window.alert("Anda bukan Admin / Kasir")
-                // window.location = "/"
-                // }
+                if (localStorage.getItem("role") === "Kasir") {
+                    this.state.token = localStorage.getItem("token")
+                    this.state.admin_id = localStorage.getItem("admin_id")
+                    this.state.customer_id = localStorage.getItem("customer_id")
+                    // this.state.outlet_id = localStorage.getItem("outlet_id")
+                } else {
+                    window.alert("Anda bukan Kasir")
+                    window.location = "/"
+                }
             } else {
                 window.alert("Customer / Cart kosong")
                 window.location = '/selectCustomer'

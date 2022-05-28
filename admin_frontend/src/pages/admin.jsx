@@ -76,6 +76,20 @@ export default class Admin extends React.Component {
             })
     }
 
+    // getAdminOutlet = () => {
+    //     let url = "http://localhost:9000/admin/" + this.state.outletID
+
+    //     axios.get(url, this.headerConfig())
+    //         .then(res => {
+    //             this.setState({
+    //                 admins: res.data.admin
+    //             })
+    //         })
+    //         .catch(err => {
+    //             console.log(err.message)
+    //         })
+    // }
+
 
     getOutlet = () => {
         let url = "http://localhost:9000/outlet"

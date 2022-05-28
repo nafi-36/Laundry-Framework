@@ -19,12 +19,14 @@ export default class Outlet extends React.Component {
             phone: "",
             action: "",
             isModalOpen: false,
-            keyword: ""
+            keyword: "",
+            outletID: "",
             // role: "",
         }
         if (localStorage.getItem("token")) {
             if (localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "Owner") {
                 this.state.token = localStorage.getItem("token")
+                this.state.outletID = localStorage.getItem("outlet_id")
             } else {
                 window.alert("Anda bukan Admin / Owner")
                 window.location = "/"
@@ -41,19 +43,22 @@ export default class Outlet extends React.Component {
         return header
     }
 
-    // getAdminOutlet = () => {
-    //     let url = "http://localhost:9000/admin/" + this.state.outletID
+    getOutletId = () => {
+        let url = "http://localhost:9000/outlet/" + this.state.outletID
 
-    //     axios.get(url, this.headerConfig())
-    //         .then(res => {
-    //             this.setState({
-    //                 admins: res.data.admin
-    //             })
-    //         })
-    //         .catch(err => {
-    //             console.log(err.message)
-    //         })
-    // }
+        axios.get(url, this.headerConfig())
+            .then(res => {
+                this.setState({
+                    outlets: res.data.outlet,
+                    name: res.data.outlet.name,
+                    address: res.data.outlet.address,
+                    phone: res.data.outlet.phone,
+                })
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+    }
 
     // getAdmin = () => {
     //     let url = "http://localhost:9000/admin"
@@ -69,39 +74,38 @@ export default class Outlet extends React.Component {
     //         })
     // }
 
+    // getOutlet = () => {
+    //     let url = "http://localhost:9000/outlet"
 
-    getOutlet = () => {
-        let url = "http://localhost:9000/outlet"
+    //     axios.get(url, this.headerConfig())
+    //         .then(res => {
+    //             this.setState({
+    //                 outlets: res.data.outlet
+    //             })
+    //             console.log(this.state.outlet)
+    //         })
+    //         .catch(err => {
+    //             console.log(err.message)
+    //         })
+    // }
 
-        axios.get(url, this.headerConfig())
-            .then(res => {
-                this.setState({
-                    outlets: res.data.outlet
-                })
-                console.log(this.state.outlet)
-            })
-            .catch(err => {
-                console.log(err.message)
-            })
-    }
-
-    handleSearch = (e) => {
-        let url = "http://localhost:9000/outlet/search"
-        if (e.keyCode === 13) {
-            let data = {
-                keyword: this.state.keyword
-            }
-            axios.post(url, data)
-                .then(res => {
-                    this.setState({
-                        outlets: res.data.outlet
-                    })
-                })
-                .catch(err => {
-                    console.log(err.message)
-                })
-        }
-    }
+    // handleSearch = (e) => {
+    //     let url = "http://localhost:9000/outlet/search"
+    //     if (e.keyCode === 13) {
+    //         let data = {
+    //             keyword: this.state.keyword
+    //         }
+    //         axios.post(url, data)
+    //             .then(res => {
+    //                 this.setState({
+    //                     outlets: res.data.outlet
+    //                 })
+    //             })
+    //             .catch(err => {
+    //                 console.log(err.message)
+    //             })
+    //     }
+    // }
 
     Add = () => {
         this.setState({
@@ -126,7 +130,6 @@ export default class Outlet extends React.Component {
         })
     }
 
-
     saveOutlet = e => {
         e.preventDefault()
         let form = {
@@ -140,9 +143,9 @@ export default class Outlet extends React.Component {
             url = "http://localhost:9000/outlet"
             axios.post(url, form, this.headerConfig())
                 .then(response => {
-                    // window.alert(response.data.message)
-                    this.getOutlet()
+                    this.getOutletId()
                     this.handleClose()
+                    window.alert(response.data.message)
                 })
                 .catch(error => console.log(error))
         }
@@ -151,7 +154,7 @@ export default class Outlet extends React.Component {
             axios.put(url, form, this.headerConfig())
                 .then(response => {
                     // window.alert(response.data.message)
-                    this.getOutlet()
+                    this.getOutletId()
                     this.handleClose()
                 })
                 .catch(error => console.log(error))
@@ -162,14 +165,14 @@ export default class Outlet extends React.Component {
     }
 
     dropOutlet = id => {
-        if (localStorage.getItem("role") === "Owner") {
+        if (localStorage.getItem("role") !== "Admin") {
             window.alert("Anda bukan Admin")
         } else {
             let url = "http://localhost:9000/outlet/" + id
             if (window.confirm("Apakah anda yakin ingin menghapus data ini ?")) {
                 axios.delete(url)
                     .then(res => {
-                        this.getOutlet()
+                        this.getOutletId()
                         this.handleClose()
                     })
                     .catch(err => {
@@ -186,7 +189,12 @@ export default class Outlet extends React.Component {
     }
 
     componentDidMount = () => {
-        this.getOutlet()
+        // if (this.state.role === "Admin") {
+        //     this.getOutlet()
+        // } else if (this.state.role === "Owner") {
+        this.getOutletId()
+        // }
+
     }
 
     render() {
@@ -199,19 +207,19 @@ export default class Outlet extends React.Component {
                         <div className="content-wrapper">
                             <h3 className="mt-0 ">Data Outlet</h3>
                             <hr />
-                            <p>Cari data outlet : </p>
+                            {/* <p>Cari data outlet : </p>
                             <input className="form-control mb-2" type="text" name="keyword"
                                 value={this.state.keyword}
                                 onChange={e => this.setState({ keyword: e.target.value })}
                                 onKeyUp={e => this.handleSearch(e)}
                                 placeholder="Enter outlet's id / name / address"
                             />
-                            <p className="text-danger mb-4">*Klik enter untuk mencari data</p>
+                            <p className="text-danger mb-4">*Klik enter untuk mencari data</p> */}
                             <button className="btn btn-primary mb-3" onClick={() => this.Add()}>
                                 Add Outlet
                             </button>
-                            <div className="card bg-light p-3">
-                                <table className="table table-transparent">
+                            <div className="card bg-light p-0">
+                                {/* <table className="table table-transparent">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -243,7 +251,29 @@ export default class Outlet extends React.Component {
                                             </tr>
                                         ))}
                                     </tbody>
-                                </table>
+                                </table> */}
+                                {/* {this.state.outlets.map((item, index) => ( */}
+                                    <div className="card col-sm-12 my-1">
+                                        <div className="card-body row d-flex align-items-center">
+                                            <div className="col-sm-3 border-right">
+                                                <img alt="outlet" src="http://cdn.onlinewebfonts.com/svg/img_550731.png"
+                                                    className="img rounded-circle" width="205" height="205" />
+                                            </div>
+                                            <div className="col-sm-6 align-items-center mx-4">
+                                                <h3 className="mb-4">Your Outlet</h3>
+                                                <h5>Name : {this.state.outlets.name}</h5>
+                                                <p>Address : {this.state.outlets.address}</p>
+                                                <p>Phone : {this.state.outlets.phone}</p>
+                                                <button className="btn btn-sm btn-primary mr-2 mt-4" onClick={() => this.Edit(this.state.outlets)}><span><Edit /> </span>Edit</button>
+                                                <button className="btn btn-sm btn-danger mt-4" onClick={() => this.dropOutlet(this.state.outlets.outlet_id)}><span><Delete /> </span>Hapus</button>
+                                            </div>
+                                            {/* <div className="col-sm-3 d-flex justify-content-center">
+                                                <button className="btn btn-sm btn-primary m-1" onClick={() => this.Edit(item)}><span><Edit /> </span>Edit</button>
+                                                <button className="btn btn-sm btn-danger m-1" onClick={() => this.dropOutlet(item.outlet_id)}><span><Delete /> </span>Hapus</button>
+                                            </div> */}
+                                        </div>
+                                    </div>
+                                {/* ))} */}
                             </div>
 
                             <Modal show={this.state.isModalOpen} onHide={this.handleClose}>

@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
         })
 })
 
-// GET ADMIN by ID, METHOD: GET, FUNCTION: findOne
+// GET OUTLET by ID, METHOD: GET, FUNCTION: findOne
 app.get("/:id", (req, res) => {
     let param = {
         outlet_id: req.params.id
